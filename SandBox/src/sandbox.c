@@ -1,14 +1,9 @@
 #include "sandbox.h"
-
-
-
-#include <stdio.h>
-
+#include "util.h"
 
 int main() {
 
-
-    printf("Program Started\n");
+    print_test();
 
 
     return 0;
