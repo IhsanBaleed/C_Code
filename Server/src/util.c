@@ -87,6 +87,11 @@ void get_system_data(char *result, size_t size) {
     pclose(fp);
 }
 
+void update_hsitory(char history[], char buffer[]) {
+    strncat(history, buffer, HISTORY_SIZE - strlen(history) - 1);
+    strncat(history, "\n", HISTORY_SIZE - strlen(history) - 1);
+}
+
 void navigation_menu(int client_socket_fs) {
     
     char buffer[BUFFER_SIZE];
@@ -109,8 +114,7 @@ void navigation_menu(int client_socket_fs) {
                 send_data_to_client(client_socket_fs, "Tell me something");
                 read_client_data(client_socket_fs, buffer, BUFFER_SIZE-1);
 
-                strncat(history, buffer, HISTORY_SIZE - strlen(history) - 1);
-                strncat(history, "\n", HISTORY_SIZE - strlen(history) - 1);
+                update_hsitory(history, buffer);
 
                 send_data_to_client(client_socket_fs, buffer);
                 break;
@@ -119,8 +123,7 @@ void navigation_menu(int client_socket_fs) {
                 printf("System Data Selected. Buffer: %s\n", buffer);
                 get_system_data(buffer, BUFFER_SIZE-1);
 
-                strncat(history, buffer, HISTORY_SIZE - strlen(history) - 1);
-                strncat(history, "\n", HISTORY_SIZE - strlen(history) - 1);
+                update_hsitory(history, buffer);
 
                 send_data_to_client(client_socket_fs, buffer);
                 printf("Data is %s\n", buffer);
