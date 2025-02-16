@@ -3,7 +3,8 @@
 
 int main() {
 
-    print_test();
+    sizeof_test_2();
+
 
     return 0;
 }
