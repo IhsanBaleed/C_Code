@@ -12,5 +12,5 @@ void send_data_to_client(int client_socket_fs, char buffer[]);
 
 void read_client_data(int client_socket_fs, char* buffer, int size);
 
-void navigation_menu(int client_socket_fs);
+void navigation_menu(int client_socket_fs, int server_socket);
 

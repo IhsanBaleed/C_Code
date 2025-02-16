@@ -10,6 +10,12 @@
 #define BUFFER_SIZE 256
 #define HISTORY_SIZE 4096
 
+char menu[] = "Here are the options\n"
+                "1. For Echo Mode\n"
+                "2. Show System Info\n"
+                "3. Show History\n"
+                "4. Close Session\n"
+                "Please Select an Option";
 
 void show_error(const char *msg) {
     perror(msg);
@@ -92,25 +98,29 @@ void update_hsitory(char history[], char buffer[]) {
     strncat(history, "\n", HISTORY_SIZE - strlen(history) - 1);
 }
 
-void navigation_menu(int client_socket_fs) {
+void show_menu(int client_socket_fs) {
+    send_data_to_client(client_socket_fs, menu);
+}
+
+void navigation_menu(int client_socket_fs, int server_socket) {
     
     char buffer[BUFFER_SIZE];
     char history[HISTORY_SIZE] = {0};
 
     while (true) {
 
-        memset(buffer, 0, 256);
+        show_menu(client_socket_fs);
 
+        memset(buffer, 0, 256);
         read_client_data(client_socket_fs, buffer, BUFFER_SIZE);
 
-        strncat(history, buffer, HISTORY_SIZE - strlen(history) - 1);
-        strncat(history, "\n", HISTORY_SIZE - strlen(history) - 1);
+        update_hsitory(history, buffer);
 
         int val = atoi(buffer);
         switch (val) {
 
             case 1: // Echo Mode
-                printf("Echo Mode Selected. Buffer: %s\n", buffer);
+                printf("Echo Mode Selected. Data: %s\n", buffer);
                 send_data_to_client(client_socket_fs, "Tell me something");
                 read_client_data(client_socket_fs, buffer, BUFFER_SIZE-1);
 
@@ -120,7 +130,7 @@ void navigation_menu(int client_socket_fs) {
                 break;
 
             case 2: // Getting System data
-                printf("System Data Selected. Buffer: %s\n", buffer);
+                printf("System Data Selected. Data: %s\n", buffer);
                 get_system_data(buffer, BUFFER_SIZE-1);
 
                 update_hsitory(history, buffer);
@@ -130,12 +140,14 @@ void navigation_menu(int client_socket_fs) {
                 break;
 
             case 3: // Show History
-                printf("Showing The History Buffer: %s\n", history);
+                printf("Showing The History Data: %s\n", history);
                 send_data_to_client(client_socket_fs, history);
                 break;
             
             case 4: // System Exit
                 printf("Closing The system: %s\n", buffer);
+                close(client_socket_fs);
+                close(server_socket);
                 exit(0);
                 break;
             default:

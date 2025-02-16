@@ -8,10 +8,6 @@
 #include <arpa/inet.h>
 
 
-void show_menu(int client_socket_fs) {
-    send_data_to_client(client_socket_fs, menu);
-}
-
 int main (int argc, char *argv[]) {
 
     if (argc < 2) {
@@ -27,9 +23,7 @@ int main (int argc, char *argv[]) {
     printf("Server listening on port %d\n", port);
     int client_socket_fs = set_client_socket(server_socket);
 
-    show_menu(client_socket_fs);
-
-    navigation_menu(client_socket_fs);
+    navigation_menu(client_socket_fs, server_socket);
 
     close(client_socket_fs);
     close(server_socket);

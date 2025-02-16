@@ -28,9 +28,11 @@ void read_server_data(int client_socket, char* buffer, int size) {
     int bytes_received = recv(client_socket, buffer, size, 0);
     if (bytes_received == 0) { // Connection closed by the server
         printf("Connection closed by the server.\n");
+        close(client_socket);
         exit(0);
     } else if (bytes_received < 0) { // An error occurred
         perror("recv");
+        close(client_socket);
         exit(0);
     } else { // All good
         buffer[bytes_received] = '\0';
@@ -49,13 +51,12 @@ void main_navigation(int client_socket) {
     char buffer[BUFFER_SIZE];
 
     while (true) {
-
         memset(buffer, 0, BUFFER_SIZE); // read data
         read_server_data(client_socket, buffer, BUFFER_SIZE-1);
+        printf("Server message is: \n\n");
         printf("%s\n\n", buffer);
 
         char msg[MSG_SIZE];
-        printf("Please Select an option\n\n");
         memset(msg, 0, MSG_SIZE);
         fgets(msg, MSG_SIZE-1, stdin); // get user input
 
