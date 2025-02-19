@@ -3,8 +3,10 @@
 
 int main() {
 
-    sizeof_test_2();
 
+    char* data = "ABC 123";
+
+    string_reversal(data);
 
     return 0;
 }

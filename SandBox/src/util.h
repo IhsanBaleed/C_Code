@@ -14,3 +14,5 @@ void sizeof_test();
 
 void sizeof_test_2();
 
+char* string_reversal(char* data);
+

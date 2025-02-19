@@ -105,7 +105,7 @@ void dynamic_allocation_test() {
     char* content = (char*)calloc(30,  sizeof(char));
     free(content);
 
-    // using realloc will set resize the memory
+    // using realloc will resize the memory
     int* nums = (int*) calloc(20, sizeof(int));
     nums = (int*)realloc(nums, 50);
     free(nums);
@@ -135,4 +135,45 @@ void sizeof_test_2() {
     // using it on a pointer would be useless
 }
 
+char* string_reversal(char* data) {
+
+    int length = strlen(data);
+
+    char result [length+1];
+    memset(result, 0, length+1);
+
+    char buffer[length];
+    memset(buffer,0,length);
+
+    int end_index = length-1;
+
+    for (int i=0; i<length; i++) {
+
+        if (data[i] == ' ' || i == length -1) {
+
+            if (i == length -1) {
+                strncat(buffer, &data[i], 1);
+            }
+
+            int x = end_index;
+            for (int j=0; j < strlen(buffer); j++) {
+                result[x - strlen(buffer)+1] = buffer[j];
+                x++;
+            }
+            
+            end_index -= strlen(buffer);
+            result[end_index] = ' ';
+            end_index --;
+            memset(buffer,0,length);
+
+        } else {
+            strncat(buffer, &data[i], 1);
+        }
+    }
+    result[length]= '\0';
+
+    char* res = (char*) malloc((length+1) * sizeof(char));
+    strcpy(res, result);
+    return res;
+}
 
